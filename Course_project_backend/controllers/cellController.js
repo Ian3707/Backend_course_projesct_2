@@ -173,11 +173,22 @@ class CellController {
 
     async delete(req, res){
         const {id} = req.params
-        const {scheduleId, day_index, timeId, index} = req.body
+        //const {scheduleId, day_index, timeId, index} = req.body
         const token = req.headers.authorization.split(' ')[1] //Bearer [token]
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
 
         try{
+            const getCellParams = await Cell.findOne(
+                {
+                    where: {id},
+                }
+            )
+
+            const scheduleId = getCellParams.get('scheduleId')
+            const day_index = getCellParams.get('day_index')
+            const timeId = getCellParams.get('timeId')
+            const index = getCellParams.get('index')
+
             const schedule = await Schedule.findOne(
                 {
                     where: [{id: scheduleId}, {userId: decoded.id}],
