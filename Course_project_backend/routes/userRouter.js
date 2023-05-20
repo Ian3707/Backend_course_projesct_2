@@ -10,4 +10,4 @@ router.post('/edit/:id', checkUser(), UserController.edit)
 router.get('/authorization', authMiddleware, UserController.check)
 router.delete('/delete/:id', checkUser(), UserController.delete)
 
-module.exports = router
+module.exports = router 

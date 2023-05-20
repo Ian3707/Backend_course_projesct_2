@@ -12,6 +12,14 @@ class TeacherController{
             if(!name || !info || !scheduleId){
                 return res.status(404).json({ message: "Эти поля не могут быть пустыми!"});
             }
+            if(name.length > 184){
+                return res.status(403).json({ message: "Максимальное число символов - 184 (Мы считали, ФИО длиннее нет)" });
+            }
+            if(info.length > 300){
+                return res.status(403).json({ message: "Максимальное число символов описания - 300" });
+            }
+
+
                 const teacherCheck = await Teacher.findOne({
                     where: {name},
                 }); 
@@ -43,6 +51,13 @@ class TeacherController{
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
     
         try{
+            if(name.length > 184){
+                return res.status(403).json({ message: "Максимальное число символов - 184 (Мы считали, ФИО длиннее нет)" });
+            }
+            if(info.length > 300){
+                return res.status(403).json({ message: "Максимальное число символов описания - 300" });
+            }
+
             const checkteacher = await Teacher.findOne(
                 {
                     where: [{id: id}, {userId: decoded.id}],

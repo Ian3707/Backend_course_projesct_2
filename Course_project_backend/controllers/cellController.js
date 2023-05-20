@@ -14,6 +14,10 @@ class CellController {
             if(day_index < 0 || day_index > 6){
                 return res.status(400).json({ message: "Такого дня не существует" });
             }
+            if(teacher.length > 102 || subject.length > 50 || chamber.length > 10){
+                return res.status(403).json({ message: "Превышено максимальное число символов" });
+            }
+
             const maxIndex = await Cell.findOne({
                 attributes: [[sequelize.fn('MAX', sequelize.col('index')), 'maxIndex']],
                 where: [{scheduleId}, {day_index}, {timeId}],
@@ -109,6 +113,11 @@ class CellController {
             const scheduleId = await Cell.findOne({
                 where: {id},
             })
+            
+            if(teacher.length > 102 || subject.length > 50 || chamber.length > 10){
+                return res.status(403).json({ message: "Превышено максимальное число символов" });
+            }
+
             if(!scheduleId){
                 return res.status(403).json({message: "Запись не существует"})
             }

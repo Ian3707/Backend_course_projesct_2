@@ -9,6 +9,6 @@ router.post('/edit/:id', checkUser(), scheduleController.edit)
 //router.get('/:id', checkUser(), scheduleController.getOne)
 router.get('/index/:index', checkUser(), scheduleController.getByIndex)
 router.get('/send/:code', checkUser(), scheduleController.getByCode)
-router.delete('/delete/:id', checkUser(), scheduleController.delete)
+router.delete('/delete/:index', checkUser(), scheduleController.delete)
 
 module.exports = router

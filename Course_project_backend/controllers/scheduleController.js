@@ -8,8 +8,12 @@ class ScheduleController {
         try{
             const token = req.headers.authorization.split(' ')[1] //Bearer [token]
             const decoded = jwt.verify(token, process.env.SECRET_KEY)
-         
+            
             const {name} = req.body
+            if(name.length > 30){
+                return res.status(403).json({ message: "Максимальное число символов - 30" });
+            }
+
             const check_name = await Schedule.findOne({
                 where: [{userId: decoded.id}, {name}]
             })
@@ -26,7 +30,7 @@ class ScheduleController {
                 new_index = maxIndex.get('maxIndex') + 1;
             }
             if(maxIndex.get('maxIndex') >= 9){
-                return res.status(400).json({ message: "Вы не можете создать больше записей" });
+                return res.status(403).json({ message: "Вы не можете создать больше записей" });
             }
 
             if(check_name){
@@ -209,6 +213,10 @@ class ScheduleController {
         const { id } = req.params; //previous name
         const { name } = req.body;
 
+        if(name.length > 30){
+            return res.status(403).json({ message: "Максимальное число символов - 30" });
+        }
+
         const token = req.headers.authorization.split(' ')[1] //Bearer [token]
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
         const schedule = await Schedule.findOne(
@@ -236,23 +244,25 @@ class ScheduleController {
     }
 
     async delete(req, res){
-        const { id } = req.params;
-
+        const { index } = req.params;
+        if(!index){
+            return res.status(404).json({ message: 'Index не найден' });
+        }
         const token = req.headers.authorization.split(' ')[1] //Bearer [token]
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
-        const schedule = await Schedule.findOne(
-            {
-                where: [{id}, {userId: decoded.id}],
-            }
-        )
-        if(!schedule){
-            return res.status(403).json({message: "Расписание не существует или не принадлежит вам"})
-        }
         
-        const index = schedule.get('index')
+        //const index = schedule.get('index')
         try {
+            const scheduleCheck = await Schedule.findOne({
+                where: [{ index: parseInt(index) }, { userId: decoded.id }],
+                
+            });
+            if(!scheduleCheck){
+                return res.status(403).json({message: "Расписание не существует или не принадлежит вам"})
+            }
+
             const schedule = await Schedule.destroy({
-                where: { id }
+                where: [{index: parseInt(index)}, {userId: decoded.id}],
             });
             ///
             const maxIndex = await Schedule.findOne({

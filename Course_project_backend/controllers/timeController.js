@@ -12,6 +12,9 @@ class TimeController {
             if(!value || !scheduleId){
                 return res.status(404).json({ message: "Это поле не может быть пустым!"});
             }
+            if(value.length > 20){
+                return res.status(403).json({ message: "Превышен лимит символов" });
+            }
             const schedulecheck = await Schedule.findOne({
                 where: [{id: scheduleId}, {userId: decoded.id}]
             });
@@ -59,15 +62,18 @@ class TimeController {
 
         const token = req.headers.authorization.split(' ')[1] //Bearer [token]
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
-        const time = await Time.findOne(
-            {
-                where: [{id}, {userId: decoded.id}],
-            }
-        )
-        if(!time){
-            return res.status(403).json({message: "Запись не существует или не принадлежит вам"})
-        }
         try {
+            const timeCheck = await Time.findOne(
+                {
+                    where: [{id}, {userId: decoded.id}],
+                }
+            )
+            if(!timeCheck){
+                return res.status(403).json({message: "Запись не существует или не принадлежит вам"})
+            }
+            if(value.length > 20){
+                return res.status(403).json({ message: "Превышен лимит символов" });
+            }
             const [rowsUpdated, [updatedTime]] = await Time.update({ value }, {
                 where: { id },
                 returning: true
