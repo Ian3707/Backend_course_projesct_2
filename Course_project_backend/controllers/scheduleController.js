@@ -191,12 +191,12 @@ class ScheduleController {
         try{
             const userCode = await User.findOne(
                 {
-                    where: {userId: decoded.id},
+                    where: {id: decoded.id},
                 }
             )
             const schedule = await Schedule.findOne(
                 {
-                    where: [{userId: decoded.id}, {share_code: userCode.get('share_code')}],
+                    where: [{userId: decoded.id}, {id: userCode.get('added_schedule')}],
                 }
             )
             if(!schedule){

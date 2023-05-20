@@ -131,7 +131,7 @@ class TimeController {
                 return res.status(403).json({message: "Запись не существует или не принадлежит вам"})
             }
             const time = await Time.destroy({
-            where: { id }
+                where: { id }
             });
             if (!time) {
                 return res.status(404).json({ message: 'Запись не найдена' });
@@ -139,9 +139,9 @@ class TimeController {
 
             const timeCount = await Schedule.findOne({
                 attributes: ['time_counter'],
-                where: { scheduleId }
+                where: { id: scheduleId }
             });
-            const [rowsUpdated] = await Schedule.update({counter: timeCount.get('counter') - 1}, 
+            const [rowsUpdated] = await Schedule.update({time_counter: timeCount.get('time_counter') - 1}, 
                 {
                 where: {id: scheduleId},
                 returning: true

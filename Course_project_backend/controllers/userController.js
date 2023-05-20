@@ -10,7 +10,7 @@ const generateJwt = (id, login) => {
     ) 
 }
 
- 
+
 class UserController {
     async registration(req, res){
         const {login, password} = req.body

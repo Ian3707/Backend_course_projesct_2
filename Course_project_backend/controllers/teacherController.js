@@ -110,7 +110,7 @@ class TeacherController{
             if(!teacher){
                 return res.status(404).json({message: "Запись не найдена"})
             }
-            return res.status(200).json(cell)
+            return res.status(200).json(teacher)
         }catch(err){
             console.error(err);
             return res.status(500).json({ message: 'Ошибка сервера' });

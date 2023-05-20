@@ -7,7 +7,7 @@ const checkUser = require('../middleware/checkUserMiddleware')
 router.post('/registration', UserController.registration)
 router.post('/login', UserController.login)
 router.post('/edit/:id', checkUser(), UserController.edit)
-router.get('/authorization', authMiddleware, UserController.check)
+//router.get('/authorization', authMiddleware, UserController.check)
 router.delete('/delete/:id', checkUser(), UserController.delete)
 
 module.exports = router 

@@ -13,7 +13,6 @@ router.use('/user', userRouter)
 router.use('/schedule', scheduleRouter)
 router.use('/cell', cellRouter)
 router.use('/teacher', teacherRouter)
-//?
 router.use('/', showtableRouter)
 
 module.exports = router

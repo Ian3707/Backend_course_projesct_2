@@ -172,7 +172,8 @@ class CellController {
     }
 
     async delete(req, res){
-        const {id, scheduleId, day_index, timeId, index} = req.body
+        const {id} = req.params
+        const {scheduleId, day_index, timeId, index} = req.body
         const token = req.headers.authorization.split(' ')[1] //Bearer [token]
         const decoded = jwt.verify(token, process.env.SECRET_KEY)
 
